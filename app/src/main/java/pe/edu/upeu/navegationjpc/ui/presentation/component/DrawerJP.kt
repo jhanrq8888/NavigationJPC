@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDrawerState
@@ -28,12 +30,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.edu.upeu.navegationjpc.ui.presentation.component.BottomNavigationBar
 import kotlinx.coroutines.launch
+
 import pe.edu.upeu.navegationjpc.ui.navegation.NavigationHost
 import pe.edu.upeu.navegationjpc.ui.theme.ThemeType
 
@@ -66,12 +70,33 @@ fun MyAppDrawer(
             ModalDrawerSheet(
                 modifier = Modifier
                 //.fillMaxSize()
-
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp)
                 ) {
                     Text("Menú", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(bottom = 16.dp))
+
+                    // Añadir el Switch para cambiar entre modo claro y oscuro
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = if (darkMode.value) "Modo Oscuro" else "Modo Claro",
+                            modifier = Modifier.weight(1f)
+                        )
+                        Switch(
+                            checked = darkMode.value,
+                            onCheckedChange = {
+                                darkMode.value = it
+                            }
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     drawerItems.forEach { item ->
                         // Resalta el item seleccionado
                         val backgroundColor = if (item.route == selectedItem) Color.LightGray else Color.Transparent
@@ -103,17 +128,7 @@ fun MyAppDrawer(
                 scaffoldState = drawerState,
                 openDialog={}
             )
-            }
-            /*topBar = {
-                TopAppBar(
-                    title = { Text("Jetpack Compose Drawer") },
-                    navigationIcon = {
-                        IconButton(onClick = { scope.launch { drawerState.open() } }) {
-                            Icon(Icons.Default.Menu, contentDescription = "Menu")
-                        }
-                    }
-                )
-            }*/,
+            },
             content = { padding ->
                 Box(modifier = Modifier.padding(padding)) {
                     NavigationHost(navController)

@@ -15,6 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import pe.edu.upeu.navegacionjpc.ui.presentation.component.MyAppDrawer
+import pe.edu.upeu.navegacionjpc.ui.presentation.component.SwitchThemeToggle
 import pe.edu.upeu.navegationjpc.ui.theme.DarkColorScheme
 import pe.edu.upeu.navegationjpc.ui.theme.LightColorScheme
 import pe.edu.upeu.navegationjpc.ui.theme.NavegationJPCTheme
@@ -28,19 +29,27 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            val themeType= remember { mutableStateOf(ThemeType.RED) }
-            val darkthemeX= isNight()
-            val darktheme= remember { mutableStateOf(darkthemeX) }
-            conttexto.CONTEXTO_APPX=this
-            val colorScheme=when(themeType.value){
-                ThemeType.RED ->{if(darktheme.value) DarkColorScheme else LightColorScheme}
-                ThemeType.GREEN ->{if(darktheme.value) sGreendarkScheme else sGreendarkScheme}
+            val themeType = remember { mutableStateOf(ThemeType.RED) }
+            val darkthemeX = isNight()
+            val darktheme = remember { mutableStateOf(darkthemeX) }
+            conttexto.CONTEXTO_APPX = this
+            val colorScheme = when(themeType.value) {
+                ThemeType.RED -> { if(darktheme.value) DarkColorScheme else LightColorScheme }
+                ThemeType.GREEN -> { if(darktheme.value) sGreendarkScheme else sGreendarkScheme }
             }
 
-
             NavegationJPCTheme(colorScheme = colorScheme) {
-
+                // Puedes añadir el Switch en tu MyAppDrawer o directamente aquí
                 MyAppDrawer(darkMode = darktheme, themeType = themeType)
+
+                // Si deseas agregar el Switch de manera independiente (fuera del drawer)
+                // puedes descomentar esta parte:
+                /*
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    SwitchThemeToggle(darktheme = darktheme)
+                }
+                */
+
                 /*
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
@@ -49,7 +58,6 @@ class MainActivity : ComponentActivity() {
                     )
                 }
                 */
-
             }
         }
     }
